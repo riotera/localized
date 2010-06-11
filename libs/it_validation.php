@@ -82,5 +82,41 @@ class ItValidation {
 		}
 		return (chr($sum % 26 + ord('A')) == $check[15]);
 	}
+
+/**
+ * Checks IBAN for Italy
+ *
+ * @param string $check The value to check.
+ * @return boolean
+ * @access public
+ * @link http://en.wikipedia.org/wiki/International_Bank_Account_Number
+ */
+	function iban($check) {
+		if (strlen($check) != 27 || !preg_match('/(IT)[0-9]{2}[A-Z][0-9]{10}[A-Z,0-9]{12}/', $check)) {
+			return false;
+		}
+
+		$check = substr($check, 4) . substr($check, 0, 4);
+		$num = '';
+
+		for ($i = 0; $i < 27; $i += 1) {
+			if (!is_numeric($check[$i])) {
+				$num .= ord($check[$i]) - ord('A') + 10;
+			} else {
+				$num .= $check[$i];
+			}
+		}
+
+		$mod = 0;
+
+		for ($i = 0; $i < floor(strlen($num) / 7); $i += 1) {
+			$mod = (int)($mod . substr($num, $i * 7, 7)) % 97;
+		}
+
+		$last_digits = strlen($num) % 7;
+		$last_digits = (int)($mod . substr($num, -$last_digits));
+
+		return (($last_digits % 97) == 1);		
+	}
 }
 ?>

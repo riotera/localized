@@ -66,5 +66,23 @@ class ItValidationTestCase extends CakeTestCase {
 		$this->assertFalse(ItValidation::cf('JLTRSSG8A41Z114A'));
 		$this->assertFalse(ItValidation::cf('Fail'));
 	}
+	
+/**
+ * test the Codice Fiscale for Italy
+ *
+ * @return void
+ * @access public
+ */
+	function testIban() {
+		$this->assertTrue(ItValidation::iban('IT60Q0123412345000000753XYZ'));
+		$this->assertTrue(ItValidation::iban('IT59F0529673970CC0000033409'));
+		$this->assertTrue(ItValidation::iban('IT96R0123454321000000012345'));
+		$this->assertTrue(ItValidation::iban('IT37S0637071221000011223344'));
+		
+		$this->assertFalse(ItValidation::iban('IT63Q0123412345000000753XYZ'));
+		$this->assertFalse(ItValidation::iban('IT60Q0123412345 000000753XYZ'));
+		$this->assertFalse(ItValidation::iban('IT60Q0123412345000000753XYz'));
+		$this->assertFalse(ItValidation::iban('IT60Q01234N2345000000753XYz'));
+	}
 }
 ?>
